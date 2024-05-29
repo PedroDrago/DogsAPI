@@ -4,6 +4,8 @@ import (
 	_ "github.com/lib/pq"
 )
 
+const version = "1.0.0"
+
 func main() {
 	app := newApplication()
 
