@@ -18,3 +18,15 @@ func (app *application) statusHandler(writer http.ResponseWriter, req *http.Requ
 		writer.WriteHeader(http.StatusInternalServerError)
 	}
 }
+
+func (app *application) createUserHandler(writer http.ResponseWriter, req *http.Request) {
+}
+
+func (app *application) viewUserHandler(writer http.ResponseWriter, req *http.Request) {
+}
+
+func (app *application) updateUserHandler(writer http.ResponseWriter, req *http.Request) {
+}
+
+func (app *application) deleteUserHandler(writer http.ResponseWriter, req *http.Request) {
+}
