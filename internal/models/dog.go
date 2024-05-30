@@ -1,11 +1,16 @@
 package models
 
+import "time"
+
 type Dog struct {
+	ID           int64
 	Name         string
-	Age          int32
+	BirthYear    int32
 	Breed        string
 	Sex          string
-	Tutor        User
-	Neutered     bool
 	SpecialNeeds []string
+	Neutered     bool
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+	Tutor        User
 }
