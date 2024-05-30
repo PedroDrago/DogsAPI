@@ -1,6 +1,13 @@
 package models
 
-import "time"
+import (
+	"database/sql"
+	"time"
+)
+
+type DogModel struct {
+	DB *sql.DB
+}
 
 type Dog struct {
 	ID           int64

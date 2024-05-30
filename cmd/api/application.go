@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/PedroDrago/DogsAPI/internal/models"
 	_ "github.com/lib/pq"
 )
 
@@ -35,6 +36,7 @@ type application struct {
 	infoLog  *log.Logger
 	errorLog *log.Logger
 	warnLog  *log.Logger
+	models   models.Models
 }
 
 func newApplication() *application {
@@ -52,6 +54,7 @@ func newApplication() *application {
 	if err != nil {
 		app.errorLog.Fatal(err)
 	}
+	app.models = models.NewModels(app.db)
 	app.infoLog.Println("Connection with Postgres established")
 	app.srv = http.Server{
 		Addr:         ":" + *flag.String("port", "4000", "Http server Port"),
