@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -26,34 +25,32 @@ func (app *application) statusHandler(writer http.ResponseWriter, req *http.Requ
 
 func (app *application) createUserHandler(writer http.ResponseWriter, req *http.Request) {
 	usr := models.User{}
-	err := json.NewDecoder(req.Body).Decode(&usr)
+	err := readJSON(req, &usr)
 	if err != nil {
-		app.errorLog.Println(err)
-		http.Error(writer, "Bad Request", http.StatusBadRequest)
+		app.responseBadRequest(writer, err.Error())
 		return
 	}
 	hash, err := bcrypt.GenerateFromPassword([]byte(usr.PasswordHash), bcrypt.MinCost)
 	if err != nil {
-		app.errorLog.Println(err)
-		http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
+		app.responseInternalServerError(writer, err)
 		return
 	}
 	usr.PasswordHash = string(hash)
 	err = app.models.Users.Insert(&usr)
 	if err != nil {
-		app.errorLog.Println(err)
-		http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
+		app.responseInternalServerError(writer, err)
 	}
 }
 
 func (app *application) viewUserHandler(writer http.ResponseWriter, req *http.Request) {
 	id, err := strconv.ParseInt(req.PathValue("id"), 10, 64)
 	if err != nil || id < 1 {
-		http.Error(writer, "Invalid User id", http.StatusBadRequest)
+		app.responseBadRequest(writer, "Invalid User ID")
 		return
 	}
 	usr, err := app.models.Users.Get(id)
 	if err != nil {
+		http.NotFound(writer, req)
 		return
 	}
 	err = writeJSON(writer, http.StatusOK, usr, nil)
