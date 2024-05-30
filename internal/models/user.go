@@ -70,3 +70,26 @@ func (model UserModel) Delete(id int64) error {
 	}
 	return nil
 }
+
+func (model UserModel) Index() ([]User, error) {
+	var users []User
+	var usr User
+	query := `
+	SELECT id, name, username, email, birth_year, address, phone_number, created_at, updated_at, password_hash 
+	FROM USERS;
+	`
+	rows, err := model.DB.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	args := []any{&usr.ID, &usr.Name, &usr.Username, &usr.Email, &usr.BirthYear, &usr.Address, &usr.PhoneNumber, &usr.CreatedAt, &usr.UpdatedAt, &usr.PasswordHash}
+	for rows.Next() {
+		err = rows.Scan(args...)
+		users = append(users, usr)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return users, nil
+}

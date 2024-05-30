@@ -76,3 +76,15 @@ func (app *application) deleteUserHandler(writer http.ResponseWriter, req *http.
 	}
 	writer.WriteHeader(http.StatusOK)
 }
+
+func (app *application) indexUserHandler(writer http.ResponseWriter, req *http.Request) {
+	users, err := app.models.Users.Index()
+	if err != nil {
+		app.responseInternalServerError(writer, err)
+		return
+	}
+	err = writeJSON(writer, http.StatusOK, users, nil)
+	if err != nil {
+		app.responseInternalServerError(writer, err)
+	}
+}
