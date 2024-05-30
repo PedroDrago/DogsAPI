@@ -60,7 +60,24 @@ func (app *application) viewUserHandler(writer http.ResponseWriter, req *http.Re
 }
 
 func (app *application) updateUserHandler(writer http.ResponseWriter, req *http.Request) {
-	writer.Write([]byte("updateUserHandler"))
+	id, err := strconv.ParseInt(req.PathValue("id"), 10, 64)
+	if err != nil || id < 1 {
+		app.responseBadRequest(writer, "Invalid User ID")
+		return
+	}
+	usr := models.User{}
+	err = readJSON(req, &usr)
+	if err != nil {
+		app.responseBadRequest(writer, err.Error())
+		return
+	}
+	usr.ID = id
+	err = app.models.Users.Update(&usr)
+	if err != nil {
+		app.responseInternalServerError(writer, err)
+		return
+	}
+	writer.WriteHeader(http.StatusOK)
 }
 
 func (app *application) deleteUserHandler(writer http.ResponseWriter, req *http.Request) {

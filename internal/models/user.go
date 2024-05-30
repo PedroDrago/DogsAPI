@@ -56,6 +56,24 @@ func (model UserModel) Get(id int64) (User, error) {
 }
 
 func (model UserModel) Update(user *User) error {
+	query := `
+	UPDATE USERS
+	SET name = $1,
+	username = $2,
+	email = $3,
+	birth_year = $4,
+	address = $5,
+	phone_number = $6,
+	updated_at = CURRENT_TIMESTAMP,
+	password_hash = $7
+	WHERE id = $8
+	returning id, updated_at;
+	`
+	args := []any{user.Name, user.Username, user.Email, user.BirthYear, user.Address, user.PhoneNumber, user.PasswordHash, user.ID}
+	err := model.DB.QueryRow(query, args...).Scan(&user.ID, &user.UpdatedAt)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
