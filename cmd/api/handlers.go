@@ -88,3 +88,18 @@ func (app *application) indexUserHandler(writer http.ResponseWriter, req *http.R
 		app.responseInternalServerError(writer, err)
 	}
 }
+
+func (app *application) indexDogHandler(writer http.ResponseWriter, req *http.Request) {
+}
+
+func (app *application) createDogHandler(writer http.ResponseWriter, req *http.Request) {
+}
+
+func (app *application) viewDogHandler(writer http.ResponseWriter, req *http.Request) {
+}
+
+func (app *application) updateDogHandler(writer http.ResponseWriter, req *http.Request) {
+}
+
+func (app *application) deleteDogHandler(writer http.ResponseWriter, req *http.Request) {
+}

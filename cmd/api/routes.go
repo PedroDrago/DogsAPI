@@ -12,6 +12,11 @@ func (app *application) route() *http.ServeMux {
 	mux.HandleFunc("GET /v1/users/{id}", app.viewUserHandler)
 	mux.HandleFunc("PUT /v1/users/{id}", app.updateUserHandler)
 	mux.HandleFunc("DELETE /v1/users/{id}", app.deleteUserHandler)
+	mux.HandleFunc("GET /v1/dogs", app.indexDogHandler)
+	mux.HandleFunc("POST /v1/dogs", app.createDogHandler)
+	mux.HandleFunc("GET /v1/dogs/{id}", app.viewDogHandler)
+	mux.HandleFunc("PUT /v1/dogs/{id}", app.updateDogHandler)
+	mux.HandleFunc("DELETE /v1/dogs/{id}", app.deleteDogHandler)
 
 	return mux
 }
