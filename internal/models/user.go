@@ -60,9 +60,13 @@ func (model UserModel) Update(user *User) error {
 }
 
 func (model UserModel) Delete(id int64) error {
-	// query := `
-	// DELETE FROM users
-	// WHERE id = $1;
-	// `
+	query := `
+	DELETE FROM users
+	WHERE id = $1;
+	`
+	_, err := model.DB.Exec(query, id)
+	if err != nil {
+		return err
+	}
 	return nil
 }
