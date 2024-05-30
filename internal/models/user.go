@@ -28,7 +28,7 @@ type User struct {
 
 func (model UserModel) Insert(user *User) error {
 	query := `
-	INSERT INTO users(name, username, email, birth_year, address, phone, password_hash) 
+	INSERT INTO users(name, username, email, birth_year, address, phone_number, password_hash) 
 	VALUES ($1, $2, $3, $4, $5, $6, $7) 
 	RETURNING id, created_at, updated_at;
 	` // TODO: I guess I'll need to Join here to get the Dogs array
@@ -43,7 +43,7 @@ func (model UserModel) Insert(user *User) error {
 func (model UserModel) Get(id int64) (User, error) {
 	usr := User{}
 	query := `
-	SELECT id, name, username, email, birth_year, address, phone, admin, created_at, updated_at, password_hash
+	SELECT id, name, username, email, birth_year, address, phone_number, admin, created_at, updated_at, password_hash
 	FROM users
 	WHERE id = $1;
 	`
