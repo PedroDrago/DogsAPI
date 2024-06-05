@@ -11,6 +11,11 @@ type UserModel struct {
 	DB *sql.DB
 }
 
+type PubUser struct {
+	User
+	Password string `json:"password"`
+}
+
 type User struct {
 	ID           int64     `json:"id"`
 	Name         string    `json:"name"`

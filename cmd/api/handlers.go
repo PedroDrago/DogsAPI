@@ -24,19 +24,19 @@ func (app *application) statusHandler(writer http.ResponseWriter, req *http.Requ
 }
 
 func (app *application) createUserHandler(writer http.ResponseWriter, req *http.Request) {
-	usr := models.User{}
+	usr := models.PubUser{}
 	err := readJSON(req, &usr)
 	if err != nil {
 		app.responseBadRequest(writer, err.Error())
 		return
 	}
-	hash, err := bcrypt.GenerateFromPassword([]byte(usr.PasswordHash), bcrypt.MinCost)
+	hash, err := bcrypt.GenerateFromPassword([]byte(usr.Password), bcrypt.MinCost)
 	if err != nil {
 		app.responseInternalServerError(writer, err)
 		return
 	}
 	usr.PasswordHash = string(hash)
-	err = app.models.Users.Insert(&usr)
+	err = app.models.Users.Insert(&usr.User)
 	if err != nil {
 		app.responseInternalServerError(writer, err)
 	}
