@@ -1,6 +1,23 @@
 # To-do
 
-- [ ] Validate JSON input for User CRUDS (Create an abstraction so that I can validate on every route with a function or something like that)
-- [ ] Sanitize endpoints (limite bytes for a request etc)
-- [ ] Configure database connections settings
-- [ ] USER Update
+- [ ] Remake everything with new knowledge
+
+- [ ] When making user CRUD, try do apopt a double hash approach:
+1. First hash with SHA512 or something like that
+2. Hash the SHA512 Hash with Bcrypt:
+``` go
+func main() {
+	passwd := "pa55word"
+	shaHash := base32.StdEncoding.WithPadding(base32.NoPadding).EncodeToString([]byte(passwd))
+	fmt.Println("Token: ", shaHash)
+	hash := sha256.Sum256([]byte(shaHash))
+	final, err := bcrypt.GenerateFromPassword(hash[:], bcrypt.DefaultCost)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(final))
+	fmt.Println(bcrypt.CompareHashAndPassword(final, hash[:]))
+}
+```
+
+- [ ] Relationship querys using innerjoins
