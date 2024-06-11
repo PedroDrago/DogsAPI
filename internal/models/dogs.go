@@ -19,10 +19,11 @@ type Dog struct {
 	Neutered     bool      `json:"neutered,omitempty"`
 	CreatedAt    time.Time `json:"-"`
 	UpdatedAt    time.Time `json:"-"`
-	Tutor        User      `json:"tutor"`
+	TutorID      int64     `json:"user_id"`
+	Version      int32     `json:"version"`
 }
 
-func (model DogModel) Insert(dog *Dog) error {
+func (model DogModel) Insert(dog *Dog, userID int64) error {
 	return nil
 }
 
@@ -40,6 +41,6 @@ func (model DogModel) Delete(id int64) error {
 }
 
 func (model DogModel) Index(id int64) ([]Dog, error) {
-	dog := []Dog{}
-	return dog, nil
+	dogs := []Dog{}
+	return dogs, nil
 }

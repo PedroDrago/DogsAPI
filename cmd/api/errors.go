@@ -1,24 +1,34 @@
 package main
 
 import (
-	"encoding/json"
+	"fmt"
 	"net/http"
+	"runtime/debug"
 )
 
 func (app *application) responseInternalServerError(writer http.ResponseWriter, err error) {
-	app.errorLog.Println(err)
-	http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
+	trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
+	app.errorLog.Output(2, trace)
+	app.errorResponse(writer, http.StatusInternalServerError, "Internal server error")
 }
 
-func (app *application) responseBadRequest(writer http.ResponseWriter, errMsg string) {
-	js, err := json.Marshal(map[string]string{
-		"error": errMsg,
-	})
+func (app *application) errorResponse(writer http.ResponseWriter, status int, message any) {
+	env := Envelope{"error": message}
+	err := writeJSON(writer, status, env, nil)
 	if err != nil {
-		app.responseInternalServerError(writer, err)
-		return
+		app.errorLog.Println(err)
+		writer.WriteHeader(http.StatusInternalServerError)
 	}
-	writer.Header().Set("Content-Type", "application/json")
-	writer.WriteHeader(http.StatusBadRequest)
-	writer.Write(js)
+}
+
+func (app *application) responseBadRequest(writer http.ResponseWriter, err error) {
+	app.errorResponse(writer, http.StatusBadRequest, err.Error())
+}
+
+func (app *application) validationErrorResponse(writer http.ResponseWriter, errors map[string]string) {
+	app.errorResponse(writer, http.StatusUnprocessableEntity, errors)
+}
+
+func (app *application) responseNotFound(writer http.ResponseWriter) {
+	app.errorResponse(writer, http.StatusNotFound, "Resource could not be found")
 }

@@ -13,7 +13,7 @@ import (
 )
 
 func openDB() (*sql.DB, error) {
-	db, err := sql.Open("postgres", os.Getenv("DOGSAPI_DB_DSN"))
+	db, err := sql.Open("postgres", os.Getenv("DOGSAPI_DB"))
 	if err != nil {
 		return nil, err
 	}
