@@ -73,7 +73,7 @@ func (model UserModel) Insert(user *User) error {
 	return nil
 }
 
-func (model UserModel) GetUserDogs(usr *User) error {
+func (model UserModel) GetUserDogs(id int64) ([]Dog, error) {
 	query := `
     SELECT dogs.id, dogs.name, dogs.birth_year, dogs.breed, dogs.sex, dogs.special_needs, dogs.neutered, dogs.created_at, dogs.updated_at, dogs.version
     FROM dogs
@@ -84,16 +84,12 @@ func (model UserModel) GetUserDogs(usr *User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	rows, err := model.DB.QueryContext(ctx, query, usr.ID)
+	rows, err := model.DB.QueryContext(ctx, query, id)
 	if err != nil {
-		switch {
-		case errors.Is(err, sql.ErrNoRows):
-			return ErrRecordNotFound
-		default:
-			return err
-		}
+		return nil, err
 	}
 	defer rows.Close()
+	var dogs []Dog
 	for rows.Next() {
 		var dog Dog
 		err = rows.Scan(
@@ -109,11 +105,11 @@ func (model UserModel) GetUserDogs(usr *User) error {
 			&dog.Version,
 		)
 		if err != nil {
-			return err
+			return nil, err
 		}
-		usr.Dogs = append(usr.Dogs, dog)
+		dogs = append(dogs, dog)
 	}
-	return nil
+	return dogs, nil
 }
 
 func (model UserModel) Get(id int64) (*User, error) {

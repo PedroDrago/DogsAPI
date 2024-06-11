@@ -94,11 +94,6 @@ func (app *application) viewUserHandler(writer http.ResponseWriter, req *http.Re
 		}
 		return
 	}
-	err = app.models.Users.GetUserDogs(usr)
-	if err != nil && err != models.ErrRecordNotFound {
-		app.responseInternalServerError(writer, err)
-		return
-	}
 	err = writeJSON(writer, http.StatusOK, Envelope{"user": usr}, nil)
 	if err != nil {
 		app.responseInternalServerError(writer, err)
@@ -207,4 +202,21 @@ func (app *application) deleteUserHandler(writer http.ResponseWriter, req *http.
 		return
 	}
 	writer.WriteHeader(http.StatusOK)
+}
+
+func (app *application) listUserDogsHandler(writer http.ResponseWriter, req *http.Request) {
+	id, err := getIDParam(req)
+	if err != nil {
+		app.responseBadRequest(writer, err)
+		return
+	}
+	dogs, err := app.models.Users.GetUserDogs(id)
+	if err != nil {
+		app.responseInternalServerError(writer, err)
+		return
+	}
+	err = writeJSON(writer, http.StatusOK, Envelope{"dogs": dogs}, nil)
+	if err != nil {
+		app.responseInternalServerError(writer, err)
+	}
 }
