@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/PedroDrago/DogsAPI/internal/validator"
+	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 )
 
@@ -68,6 +69,49 @@ func (model UserModel) Insert(user *User) error {
 		default:
 			return err
 		}
+	}
+	return nil
+}
+
+func (model UserModel) GetUserDogs(usr *User) error {
+	query := `
+    SELECT dogs.id, dogs.name, dogs.birth_year, dogs.breed, dogs.sex, dogs.special_needs, dogs.neutered, dogs.created_at, dogs.updated_at, dogs.version
+    FROM dogs
+    INNER JOIN users
+    ON dogs.user_id = users.id
+    WHERE users.id = $1
+    `
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	rows, err := model.DB.QueryContext(ctx, query, usr.ID)
+	if err != nil {
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			return ErrRecordNotFound
+		default:
+			return err
+		}
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var dog Dog
+		err = rows.Scan(
+			&dog.ID,
+			&dog.Name,
+			&dog.BirthYear,
+			&dog.Breed,
+			&dog.Sex,
+			pq.Array(dog.SpecialNeeds),
+			&dog.Neutered,
+			&dog.CreatedAt,
+			&dog.UpdatedAt,
+			&dog.Version,
+		)
+		if err != nil {
+			return err
+		}
+		usr.Dogs = append(usr.Dogs, dog)
 	}
 	return nil
 }
@@ -189,7 +233,7 @@ func (usr *User) Validate(v *validator.Validator) bool {
 	v.Check(l <= 50, "usrname", "must at most 20 bytes long")
 	v.Check(usr.Email != "", "email", "must be provided")
 	v.Check(v.Match(usr.Email, EmailRX), "email", "must be a valid email address")
-	v.Check(usr.BirthYear > 1900, "birth_year", "must be higher than 1900")
+	v.Check(usr.BirthYear > 1900, "birth_year", "must be greater than than 1900")
 	v.Check(usr.BirthYear < int32(time.Now().Year()), "birth_year", "must be not in the future")
 	v.Check(usr.Address != "", "address", "must be provided")
 	l = len(usr.Address) // In a real app should be validated as a real address
@@ -204,4 +248,24 @@ func (usr *User) Validate(v *validator.Validator) bool {
 	v.Check(l >= 16, "password", "must be at least 16 bytes long")
 	v.Check(l <= 256, "password", "must be at most 256 bytes long")
 	return v.Valid()
+}
+
+func (model UserModel) UserExists(id int64) (bool, error) {
+	query := `
+    SELECT COUNT(*)
+    FROM USERS
+    WHERE id = $1
+    `
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var count int
+	err := model.DB.QueryRowContext(ctx, query, id).Scan(&count)
+	if err != nil {
+		return false, err
+	}
+	if count == 0 {
+		return false, nil
+	}
+	return true, nil
 }

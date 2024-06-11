@@ -94,6 +94,11 @@ func (app *application) viewUserHandler(writer http.ResponseWriter, req *http.Re
 		}
 		return
 	}
+	err = app.models.Users.GetUserDogs(usr)
+	if err != nil && err != models.ErrRecordNotFound {
+		app.responseInternalServerError(writer, err)
+		return
+	}
 	err = writeJSON(writer, http.StatusOK, Envelope{"user": usr}, nil)
 	if err != nil {
 		app.responseInternalServerError(writer, err)
