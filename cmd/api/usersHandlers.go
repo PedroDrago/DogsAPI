@@ -39,7 +39,7 @@ func (app *application) createUserHandler(writer http.ResponseWriter, req *http.
 	}
 	err := readJSON(req, &input)
 	if err != nil {
-		app.responseBadRequest(writer, err)
+		app.badRequestResponse(writer, err)
 		return
 	}
 	usr := models.User{
@@ -53,7 +53,7 @@ func (app *application) createUserHandler(writer http.ResponseWriter, req *http.
 	}
 	usr.PasswordHash, err = HashPassword(usr.PassowrdPlainText)
 	if err != nil {
-		app.responseInternalServerError(writer, err)
+		app.internalServerErrorResponse(writer, err)
 	}
 	v := validator.New()
 	if !usr.Validate(v) {
@@ -64,46 +64,46 @@ func (app *application) createUserHandler(writer http.ResponseWriter, req *http.
 	if err != nil {
 		switch {
 		case err.Error() == `pq: duplicate key value violates unique constraint "users_email_key"`:
-			app.responseBadRequest(writer, err)
+			app.badRequestResponse(writer, err)
 		case err.Error() == `pq: duplicate key value violates unique constraint "users_user_key"`:
-			app.responseBadRequest(writer, err)
+			app.badRequestResponse(writer, err)
 		default:
-			app.responseInternalServerError(writer, err)
+			app.internalServerErrorResponse(writer, err)
 		}
 		return
 	}
 	err = writeJSON(writer, http.StatusCreated, Envelope{"user": usr}, nil)
 	if err != nil {
-		app.responseInternalServerError(writer, err)
+		app.internalServerErrorResponse(writer, err)
 	}
 }
 
 func (app *application) viewUserHandler(writer http.ResponseWriter, req *http.Request) {
 	id, err := getIDParam(req)
 	if err != nil {
-		app.responseBadRequest(writer, err)
+		app.badRequestResponse(writer, err)
 		return
 	}
 	usr, err := app.models.Users.Get(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, models.ErrRecordNotFound):
-			app.responseBadRequest(writer, err)
+			app.badRequestResponse(writer, err)
 		default:
-			app.responseInternalServerError(writer, err)
+			app.internalServerErrorResponse(writer, err)
 		}
 		return
 	}
 	err = writeJSON(writer, http.StatusOK, Envelope{"user": usr}, nil)
 	if err != nil {
-		app.responseInternalServerError(writer, err)
+		app.internalServerErrorResponse(writer, err)
 	}
 }
 
 func (app *application) updateUserHandler(writer http.ResponseWriter, req *http.Request) {
 	id, err := getIDParam(req)
 	if err != nil {
-		app.responseBadRequest(writer, err)
+		app.badRequestResponse(writer, err)
 		return
 	}
 
@@ -111,9 +111,9 @@ func (app *application) updateUserHandler(writer http.ResponseWriter, req *http.
 	if err != nil {
 		switch {
 		case errors.Is(err, models.ErrRecordNotFound):
-			app.responseNotFound(writer)
+			app.notFoundResponse(writer)
 		default:
-			app.responseInternalServerError(writer, err)
+			app.internalServerErrorResponse(writer, err)
 		}
 		return
 	}
@@ -128,7 +128,7 @@ func (app *application) updateUserHandler(writer http.ResponseWriter, req *http.
 	}
 	err = readJSON(req, &input)
 	if err != nil {
-		app.responseInternalServerError(writer, err)
+		app.internalServerErrorResponse(writer, err)
 		return
 	}
 	if input.Name != nil {
@@ -153,7 +153,7 @@ func (app *application) updateUserHandler(writer http.ResponseWriter, req *http.
 		usr.PassowrdPlainText = *input.Password
 		usr.PasswordHash, err = HashPassword(usr.PassowrdPlainText)
 		if err != nil {
-			app.responseInternalServerError(writer, err)
+			app.internalServerErrorResponse(writer, err)
 			return
 		}
 	}
@@ -166,7 +166,7 @@ func (app *application) updateUserHandler(writer http.ResponseWriter, req *http.
 	if err != nil {
 		switch {
 		case errors.Is(err, models.ErrRecordNotFound):
-			app.responseNotFound(writer)
+			app.editConflictResponse(writer)
 		case errors.Is(err, models.ErrDuplicateEmail):
 			v.Errors["email"] = models.ErrDuplicateEmail.Error()
 			app.validationErrorResponse(writer, v.Errors)
@@ -174,30 +174,30 @@ func (app *application) updateUserHandler(writer http.ResponseWriter, req *http.
 			v.Errors["username"] = models.ErrDuplicateUsername.Error()
 			app.validationErrorResponse(writer, v.Errors)
 		default:
-			app.responseInternalServerError(writer, err)
+			app.internalServerErrorResponse(writer, err)
 		}
 		return
 	}
 	writer.Header().Set("Location", fmt.Sprintf("/v1/users/%d", usr.ID))
 	err = writeJSON(writer, http.StatusOK, Envelope{"user": usr}, nil)
 	if err != nil {
-		app.responseInternalServerError(writer, err)
+		app.internalServerErrorResponse(writer, err)
 	}
 }
 
 func (app *application) deleteUserHandler(writer http.ResponseWriter, req *http.Request) {
 	id, err := getIDParam(req)
 	if err != nil {
-		app.responseBadRequest(writer, err)
+		app.badRequestResponse(writer, err)
 		return
 	}
 	err = app.models.Users.Delete(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, models.ErrRecordNotFound):
-			app.responseNotFound(writer)
+			app.notFoundResponse(writer)
 		default:
-			app.responseInternalServerError(writer, err)
+			app.internalServerErrorResponse(writer, err)
 		}
 		return
 	}
@@ -207,16 +207,16 @@ func (app *application) deleteUserHandler(writer http.ResponseWriter, req *http.
 func (app *application) listUserDogsHandler(writer http.ResponseWriter, req *http.Request) {
 	id, err := getIDParam(req)
 	if err != nil {
-		app.responseBadRequest(writer, err)
+		app.badRequestResponse(writer, err)
 		return
 	}
 	dogs, err := app.models.Users.GetUserDogs(id)
 	if err != nil {
-		app.responseInternalServerError(writer, err)
+		app.internalServerErrorResponse(writer, err)
 		return
 	}
 	err = writeJSON(writer, http.StatusOK, Envelope{"dogs": dogs}, nil)
 	if err != nil {
-		app.responseInternalServerError(writer, err)
+		app.internalServerErrorResponse(writer, err)
 	}
 }

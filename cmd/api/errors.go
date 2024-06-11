@@ -6,7 +6,7 @@ import (
 	"runtime/debug"
 )
 
-func (app *application) responseInternalServerError(writer http.ResponseWriter, err error) {
+func (app *application) internalServerErrorResponse(writer http.ResponseWriter, err error) {
 	trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
 	app.errorLog.Output(2, trace)
 	app.errorResponse(writer, http.StatusInternalServerError, "Internal server error")
@@ -21,7 +21,7 @@ func (app *application) errorResponse(writer http.ResponseWriter, status int, me
 	}
 }
 
-func (app *application) responseBadRequest(writer http.ResponseWriter, err error) {
+func (app *application) badRequestResponse(writer http.ResponseWriter, err error) {
 	app.errorResponse(writer, http.StatusBadRequest, err.Error())
 }
 
@@ -29,6 +29,10 @@ func (app *application) validationErrorResponse(writer http.ResponseWriter, erro
 	app.errorResponse(writer, http.StatusUnprocessableEntity, errors)
 }
 
-func (app *application) responseNotFound(writer http.ResponseWriter) {
+func (app *application) notFoundResponse(writer http.ResponseWriter) {
 	app.errorResponse(writer, http.StatusNotFound, "Resource could not be found")
+}
+
+func (app *application) editConflictResponse(writer http.ResponseWriter) {
+	app.errorResponse(writer, http.StatusConflict, "edit conflict")
 }
