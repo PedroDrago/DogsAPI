@@ -1,4 +1,13 @@
-# To-do
-
-- [ ] change password hashing: sha 256 -> base64 -> bcrypt (https://security.stackexchange.com/questions/61595/is-it-good-practice-to-sha512-passwords-prior-to-passing-them-to-bcrypt)
-- [ ] Write unit tests for CRUD operations (learn go by testing)
+- Rewrite dogs api in go with:
+    - routing framework/lib
+    - logging
+    - observability and SRE shit
+    - oauth2 with google
+    - ci cd
+    - good tooling
+    - postgres or sqlite?
+    - unit and integration tests
+    - docker compose
+    - autoversioning
+    - git flow with feature branch vs main branch
+    - dev blog about project development

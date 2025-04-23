@@ -2,7 +2,7 @@
 
 ### My First Golang REST API (🚧WIP🚧)
 
-The idea is to build an API for a service that handles dog accommodation/lodging reservations, as that is my current area of work.
+The idea is to build an API for a service that handles dog accommodation/lodging reservations, as that is my family current area of work.
 
 #### Goal (for now)
 The final goal is to have an API with:
@@ -15,9 +15,8 @@ The final goal is to have an API with:
 
 When the API is ready, I'll deploy it and start working on the frontend.
 
-
 ### Stack and Tools (for now)
-- [ ] go 1.22.4
+- [ ] go
 - [ ] stdlib net/http package for routing, handling and serving
-- [ ] PostgreSQL for Database
+- [ ] PostgreSQL 
 - [ ] [migrate](https://github.com/golang-migrate/migrate) for DB migrations
