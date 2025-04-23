@@ -1,6 +1,14 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+name: DogsAPI Validation
+run-name: ${{ github.actor }}/${{ github.ref }}
+on:
+  pull_request:
+    types:
+      - opened
+    branches:
+      - 'main'
+  push:
+    branches:
+      - 'main'
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
