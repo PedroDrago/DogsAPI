@@ -1,5 +1,5 @@
 name: DogsAPI Validation
-run-name: ${{ github.actor }} - ${{ github.ref_name }}
+run-name: ${{ github.actor }} - ${{ github.event_name }} - ${{ github.ref_name }}
 on:
   pull_request:
     types:
