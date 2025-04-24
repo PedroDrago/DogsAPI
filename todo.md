@@ -1,31 +1,33 @@
-- Rewrite dogs api in go with:
-    - [ ] logging
-    - [ ] cache
-        - [ ] redis?
-    - [ ] observability and SRE stuff
-        - [ ] prometeus
-        - [ ] grafana
-        - [ ] ELK?
+- [ ] Users CRUD
+- [ ] Dogs CRUD
+- [ ] auth
     - [ ] oauth2 with google
-    - ci:
-        - [x] build validation
-        - [ ] tests
-        - [ ] static analysis
-           - [x] golangci-lint
-           - [x] formatting
-           - [ ] gitleaks
+- [ ] rate limiting
+- [ ] logging
+- [ ] cache
+    - redis?
+- [ ] observability and SRE stuff
+    - [ ] prometeus
+    - [ ] grafana
+    - ELK?
+- ci:
+    - [x] build validation
+    - [ ] tests
+    - [x] static analysis
+        - [x] golangci-lint
+        - [x] formatting
+        - [x] gitleaks (job is running but i believe it is not catching anything, i leaked a discord token on purpose and it did not caught)
     - cd:
         - [ ] versioning
         - [ ] deploy to vps
-            - [ ] which vps to use?
+            - which vps to use?
     - [ ] golang modern tooling
         - [ ] migrate
         - [ ] air
     - [ ] unit tests
-        - [ ] need to study better how to unit test rest apis
+        - need to study better how to unit test rest apis
     - [ ] integration tests
-        - [ ] start api -> run script that bootstrap dev DB -> run script that populates dev db with few bytes of mocked data -> runs integration tests -> burns DB
-    - [x] docker compose
+        -  start api -> run script that bootstrap dev DB -> run script that populates dev db with few bytes of mocked data -> runs integration tests -> burns DB
     - [ ] dev blog about project development
     - [ ] docker secrets or hashicorp Vault for credentials
     - [ ] reverse proxy with HTTPS

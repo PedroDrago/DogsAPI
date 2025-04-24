@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY . .
 
+ENV GIN_MODE="release"
+
 RUN go mod download
 
 RUN go build -o api ./cmd/api/main.go

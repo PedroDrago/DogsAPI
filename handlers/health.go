@@ -7,6 +7,6 @@ import (
 
 func (h *HandlerController) HealthGetHandler(ctx *gin.Context) {
 	ctx.JSON(200, types.JSON{
-		"message": "Ok",
+		"message": "Ok2",
 	})
 }
