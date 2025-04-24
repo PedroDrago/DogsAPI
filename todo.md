@@ -11,8 +11,9 @@
         - [x] build validation
         - [ ] tests
         - [ ] static analysis
-           - [ ] golangci-lint
-           - [ ] golangci-lint
+           - [x] golangci-lint
+           - [x] formatting
+           - [ ] gitleaks
     - cd:
         - [ ] versioning
         - [ ] deploy to vps
