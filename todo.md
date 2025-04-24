@@ -13,12 +13,13 @@
 - ci:
     - [x] build validation
     - [ ] tests
+
     - [x] static analysis
         - [x] golangci-lint
         - [x] formatting
         - [x] gitleaks (job is running but i believe it is not catching anything, i leaked a discord token on purpose and it did not caught)
     - cd:
-        - [ ] versioning
+        - [ ] versioning: https://github.com/semantic-release/semantic-release
         - [ ] deploy to vps
             - which vps to use?
     - [ ] golang modern tooling
