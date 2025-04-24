@@ -1,13 +1,24 @@
 - Rewrite dogs api in go with:
-    - routing framework/lib
-    - logging
-    - observability and SRE shit
-    - oauth2 with google
-    - ci cd
-    - good tooling
-    - postgres or sqlite?
-    - unit and integration tests
-    - docker compose
-    - autoversioning
-    - git flow with feature branch vs main branch
-    - dev blog about project development
+    - [ ] logging
+    - [ ] observability and SRE stuff
+        - [ ] prometeus
+        - [ ] grafana
+        - [ ] ELK?
+    - [ ] oauth2 with google
+    - ci:
+        - [x] build validation
+        - [ ] tests
+        - [ ] static analysis
+    - cd:
+        - [ ] versioning
+        - [ ] deploy to vps
+            - [ ] which vps to use?
+    - [ ] golang modern tooling
+        - [ ] migrate
+        - [ ] air
+    - [ ] unit tests
+        - [ ] need to study better how to unit test rest apis
+    - [ ] integration tests
+        - [ ] start api -> run script that bootstrap dev DB -> run script that populates dev db with few bytes of mocked data -> runs integration tests -> burns DB
+    - [x] docker compose
+    - [ ] dev blog about project development
