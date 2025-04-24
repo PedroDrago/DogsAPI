@@ -5,4 +5,7 @@ type User struct {
 	Name string
 }
 
-const TK = "8dyfuiRyq=vVc3RRr_edRk-fK__JItpZ"
+const (
+	TK  = "8dyfuiRyq=vVc3RRr_edRk-fK__JItpZ"
+	TK2 = "K4DcW67BfNpPF9JnIR62zEjZ7uGovUyk"
+)
