@@ -38,3 +38,24 @@ jobs:
 
       - name: Build App
         run: go build ./cmd/api/main.go
+
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      
+      - name: Set Up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.24'
+
+      - name: Build App
+        run: |
+          fmt_result=$(gofmt -l .)
+          if [ -n "$fmt_result" ]; then
+              echo "The following files are not properly formatted:"
+              echo "$fmt_result"
+              exit 1
+          fi
+

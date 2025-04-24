@@ -1,5 +1,7 @@
 - Rewrite dogs api in go with:
     - [ ] logging
+    - [ ] cache
+        - [ ] redis?
     - [ ] observability and SRE stuff
         - [ ] prometeus
         - [ ] grafana
@@ -9,6 +11,8 @@
         - [x] build validation
         - [ ] tests
         - [ ] static analysis
+           - [ ] golangci-lint
+           - [ ] golangci-lint
     - cd:
         - [ ] versioning
         - [ ] deploy to vps
@@ -22,3 +26,5 @@
         - [ ] start api -> run script that bootstrap dev DB -> run script that populates dev db with few bytes of mocked data -> runs integration tests -> burns DB
     - [x] docker compose
     - [ ] dev blog about project development
+    - [ ] docker secrets or hashicorp Vault for credentials
+    - [ ] reverse proxy with HTTPS
