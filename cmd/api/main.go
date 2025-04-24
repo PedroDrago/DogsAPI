@@ -13,7 +13,7 @@ func main() {
 	controller := handlers.HandlerController{}
 	router := gin.Default()
 	router.SetTrustedProxies(nil)
-	routerV1 := router.Group("/v1", 29)
+	routerV1 := router.Group("/v1")
 	routerV1.GET("health", controller.HealthGetHandler)
 	router.Run()
 }
