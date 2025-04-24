@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	controller := handlers.HandlerController{}osajdf
+	controller := handlers.HandlerController{}
 	router := gin.Default()
 	router.SetTrustedProxies(nil)
 	routerV1 := router.Group("/v1")
